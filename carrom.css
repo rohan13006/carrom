@@ -1,0 +1,415 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100vh;
+  background: #1b1b1b;
+  font-family: Arial, sans-serif;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 20px;
+}
+
+h1 {
+  color: #f5d08a;
+  font-size: 32px;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.game-info {
+  width: 600px;
+  max-width: 95vw;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
+  margin-bottom: 15px;
+  background: #3a1f0f;
+  border: 3px solid #c58b45;
+  border-radius: 10px;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.game-info span {
+  color: #ffe08a;
+  margin-left: 5px;
+}
+
+.board {
+  width: 600px;
+  height: 600px;
+  max-width: 95vw;
+  max-height: 95vw;
+  position: relative;
+  background: #d99a4e;
+  border: 18px solid #542b12;
+  border-radius: 8px;
+  box-shadow:
+    0 0 0 5px #9b5e25,
+    0 10px 30px rgba(0, 0, 0, 0.6);
+  overflow: hidden;
+  user-select: none;
+  touch-action: none;
+}
+
+.inner-board {
+  position: absolute;
+  left: 35px;
+  right: 35px;
+  top: 35px;
+  bottom: 35px;
+  background: #f2c477;
+  border: 3px solid #6e3b19;
+  pointer-events: none;
+}
+
+.inner-board::before,
+.inner-board::after {
+  content: "";
+  position: absolute;
+  background: #8c4e20;
+}
+
+.inner-board::before {
+  width: 2px;
+  height: 100%;
+  left: 50%;
+  top: 0;
+}
+
+.inner-board::after {
+  height: 2px;
+  width: 100%;
+  left: 0;
+  top: 50%;
+}
+
+.pocket {
+  width: 44px;
+  height: 44px;
+  position: absolute;
+  background: #120d0a;
+  border-radius: 50%;
+  z-index: 15;
+  box-shadow:
+    inset 0 0 0 5px #40200e,
+    0 3px 7px rgba(0, 0, 0, 0.7);
+}
+
+.p1 {
+  left: 9px;
+  top: 9px;
+}
+
+.p2 {
+  right: 9px;
+  top: 9px;
+}
+
+.p3 {
+  left: 9px;
+  bottom: 9px;
+}
+
+.p4 {
+  right: 9px;
+  bottom: 9px;
+}
+
+.center {
+  width: 105px;
+  height: 105px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  border: 3px solid #7b431d;
+  border-radius: 50%;
+  background: transparent;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.center::before {
+  content: "";
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: #c83227;
+  border: 3px solid #741b15;
+}
+
+.center::after {
+  content: "";
+  position: absolute;
+  width: 135px;
+  height: 135px;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  border: 2px solid #9b5927;
+  border-radius: 50%;
+}
+
+.aim-line {
+  position: absolute;
+  width: 3px;
+  height: 250px;
+  left: 50%;
+  bottom: 72px;
+  transform: translateX(-50%) rotate(0deg);
+  transform-origin: bottom center;
+  background: rgba(190, 35, 25, 0.85);
+  border-radius: 5px;
+  z-index: 12;
+  pointer-events: none;
+  display: block;
+  box-shadow: 0 0 5px rgba(255, 0, 0, 0.3);
+}
+
+.aim-line::before {
+  content: "";
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  left: 50%;
+  top: 0;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: #d32f2f;
+}
+
+.coin {
+  width: 28px;
+  height: 28px;
+  position: absolute;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  z-index: 10;
+  pointer-events: none;
+  will-change: left, top;
+}
+
+.coin.white {
+  background: radial-gradient(
+    circle at 35% 30%,
+    #ffffff 0%,
+    #f1f1f1 45%,
+    #c7c7c7 100%
+  );
+  border: 2px solid #999;
+  box-shadow:
+    0 2px 5px rgba(0, 0, 0, 0.5),
+    inset 0 0 4px rgba(0, 0, 0, 0.25);
+}
+
+.coin.black {
+  background: radial-gradient(
+    circle at 35% 30%,
+    #666 0%,
+    #292929 45%,
+    #050505 100%
+  );
+  border: 2px solid #111;
+  box-shadow:
+    0 2px 5px rgba(0, 0, 0, 0.65),
+    inset 0 0 4px rgba(255, 255, 255, 0.08);
+}
+
+.coin.queen {
+  background: radial-gradient(
+    circle at 35% 30%,
+    #ff7168 0%,
+    #d83229 45%,
+    #8e1711 100%
+  );
+  border: 2px solid #74100c;
+  box-shadow:
+    0 2px 5px rgba(0, 0, 0, 0.6),
+    inset 0 0 4px rgba(255, 255, 255, 0.25);
+}
+
+.striker {
+  width: 36px;
+  height: 36px;
+  position: absolute;
+  left: 50%;
+  bottom: 42px;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 35% 30%,
+    #ffffff 0%,
+    #ededed 45%,
+    #a6a6a6 100%
+  );
+  border: 3px solid #555;
+  box-shadow:
+    0 3px 7px rgba(0, 0, 0, 0.55),
+    inset 0 0 5px rgba(0, 0, 0, 0.25);
+  z-index: 25;
+  cursor: grab;
+  touch-action: none;
+}
+
+.striker:active {
+  cursor: grabbing;
+}
+
+.striker::before {
+  content: "";
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  border: 2px solid #777;
+  border-radius: 50%;
+}
+
+.striker::after {
+  content: "";
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background: #777;
+  border-radius: 50%;
+}
+
+.message {
+  position: absolute;
+  left: 50%;
+  top: 10px;
+  transform: translateX(-50%);
+  padding: 7px 16px;
+  background: rgba(70, 32, 10, 0.92);
+  color: #fff;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: bold;
+  z-index: 40;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+#resetBtn {
+  position: absolute;
+  left: 50%;
+  bottom: 5px;
+  transform: translateX(-50%);
+  padding: 8px 20px;
+  border: none;
+  border-radius: 6px;
+  background: #7b241c;
+  color: #fff;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  z-index: 40;
+  transition: 0.2s ease;
+}
+
+#resetBtn:hover {
+  background: #a93226;
+  transform: translateX(-50%) scale(1.05);
+}
+
+#resetBtn:active {
+  transform: translateX(-50%) scale(0.97);
+}
+
+@media (max-width: 650px) {
+  body {
+    padding: 10px;
+  }
+
+  h1 {
+    font-size: 26px;
+  }
+
+  .game-info {
+    width: 95vw;
+    padding: 10px 14px;
+    font-size: 15px;
+  }
+
+  .board {
+    width: 95vw;
+    height: 95vw;
+    border-width: 12px;
+  }
+
+  .inner-board {
+    left: 25px;
+    right: 25px;
+    top: 25px;
+    bottom: 25px;
+  }
+
+  .pocket {
+    width: 36px;
+    height: 36px;
+  }
+
+  .p1 {
+    left: 6px;
+    top: 6px;
+  }
+
+  .p2 {
+    right: 6px;
+    top: 6px;
+  }
+
+  .p3 {
+    left: 6px;
+    bottom: 6px;
+  }
+
+  .p4 {
+    right: 6px;
+    bottom: 6px;
+  }
+
+  .coin {
+    width: 24px;
+    height: 24px;
+  }
+
+  .striker {
+    width: 31px;
+    height: 31px;
+    bottom: 35px;
+  }
+
+  .center {
+    width: 85px;
+    height: 85px;
+  }
+
+  .aim-line {
+    height: 210px;
+    bottom: 60px;
+  }
+
+  #resetBtn {
+    padding: 7px 16px;
+    font-size: 13px;
+  }
+}
